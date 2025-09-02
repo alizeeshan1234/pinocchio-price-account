@@ -1,5 +1,6 @@
-use pinocchio::{account_info::AccountInfo, instruction::Signer, program_error::ProgramError, sysvars::{clock::Clock, rent::Rent, Sysvar}, *};
+use pinocchio::{account_info::AccountInfo, instruction::Signer, program_error::ProgramError, pubkey::log, sysvars::{clock::Clock, rent::Rent, Sysvar}, *};
 use pinocchio_system::instructions::CreateAccount;
+use pinocchio_log::log;
 
 use crate::states::{PriceAccount};
 

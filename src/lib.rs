@@ -22,6 +22,7 @@ fn process_instruction(
         PriceInstructions::CreatePriceAccount => instructions::create_price_account::process_create_price_account(accounts, instruction_data)?,
         PriceInstructions::SetPrice => instructions::set_price::process_set_price(accounts, instruction_data)?,
         PriceInstructions::ModifyPrice => instructions::modify_price::process_modify_price(accounts, instruction_data)?,
+        PriceInstructions::GetPrice => {},
     }
 
     Ok(())

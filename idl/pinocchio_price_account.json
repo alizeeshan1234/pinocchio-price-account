@@ -1,0 +1,180 @@
+{
+  "version": "0.1.0",
+  "name": "pinocchio_price_account",
+  "instructions": [
+    {
+      "name": "CreatePriceAccount",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true,
+          "docs": [
+            "Account that pays for account creation"
+          ]
+        },
+        {
+          "name": "priceAccount",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "The price account to be created"
+          ]
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "System program"
+          ]
+        }
+      ],
+      "args": [
+        {
+          "name": "priceAccountId",
+          "type": "u64"
+        }
+      ],
+      "discriminant": {
+        "type": "u8",
+        "value": 0
+      }
+    },
+    {
+      "name": "SetPrice",
+      "accounts": [
+        {
+          "name": "signer",
+          "isMut": false,
+          "isSigner": true,
+          "docs": [
+            "Signer authority"
+          ]
+        },
+        {
+          "name": "priceAccount",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "The price account to update"
+          ]
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "System program"
+          ]
+        }
+      ],
+      "args": [
+        {
+          "name": "priceAccountId",
+          "type": "u64"
+        },
+        {
+          "name": "priceToSet",
+          "type": "f64"
+        }
+      ],
+      "discriminant": {
+        "type": "u8",
+        "value": 1
+      }
+    },
+    {
+      "name": "ModifyPrice",
+      "accounts": [
+        {
+          "name": "signer",
+          "isMut": false,
+          "isSigner": true,
+          "docs": [
+            "Signer authority"
+          ]
+        },
+        {
+          "name": "priceAccount",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "The price account to update"
+          ]
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "System program"
+          ]
+        }
+      ],
+      "args": [
+        {
+          "name": "priceAccountId",
+          "type": "u64"
+        },
+        {
+          "name": "modifiedPrice",
+          "type": "f64"
+        }
+      ],
+      "discriminant": {
+        "type": "u8",
+        "value": 2
+      }
+    },
+    {
+      "name": "GetPrice",
+      "accounts": [
+        {
+          "name": "priceAccount",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "The price account to read from"
+          ]
+        }
+      ],
+      "args": [
+        {
+          "name": "priceAccountId",
+          "type": "u64"
+        }
+      ],
+      "discriminant": {
+        "type": "u8",
+        "value": 3
+      }
+    }
+  ],
+  "accounts": [
+    {
+      "name": "PriceAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "price",
+            "type": "f64"
+          },
+          {
+            "name": "lastUpdatedTimestamp",
+            "type": "i64"
+          },
+          {
+            "name": "priceAccountBump",
+            "type": "u8"
+          }
+        ]
+      }
+    }
+  ],
+  "metadata": {
+    "origin": "shank",
+    "address": "4zSrGy87rYtohmWK7PLBsojskZQa38GMwmoQkeK1nJSD"
+  }
+}

@@ -1,6 +1,7 @@
 use pinocchio::{account_info::{AccountInfo, Ref, RefMut}, program_error::ProgramError, *};
+use shank::ShankAccount;
 
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, ShankAccount)]
 pub struct PriceAccount {
     pub price: f64,
     pub last_updated_timestamp: i64,
