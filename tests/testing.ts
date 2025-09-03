@@ -18,6 +18,20 @@ if (!idl.metadata?.address) {
     throw new Error("No address found in IDL metadata");
 }
 
+const COMPUTE_BUDGET_PROGRAM_ID = new PublicKey("ComputeBudget111111111111111111111111111111");
+
+function createSetComputeUnitLimitInstruction(units: number): TransactionInstruction {
+    const data = Buffer.alloc(5);
+    data.writeUInt8(2, 0); 
+    data.writeUInt32LE(units, 1);
+    
+    return new TransactionInstruction({
+        programId: COMPUTE_BUDGET_PROGRAM_ID,
+        keys: [],
+        data: data,
+    });
+}
+
 describe('Create Price Account', function() {
     this.timeout(10000);
     
@@ -25,7 +39,7 @@ describe('Create Price Account', function() {
     let program: Program;
     let provider: AnchorProvider;
     
-    const priceAccountId = new BN(834);
+    const priceAccountId = new BN(838);
     let priceAccountPda: PublicKey;
 
     before(async function () {
@@ -181,6 +195,8 @@ describe('Create Price Account', function() {
             program.programId
         );
 
+        const computeUnitLimitIx = createSetComputeUnitLimitInstruction(5000);
+
         const instructionDiscriminant = Buffer.from([2]);
         const priceAccountIdBuffer = priceAccountId.toArrayLike(Buffer, "le", 8);
         const modifiedPrice = 140;
@@ -190,7 +206,7 @@ describe('Create Price Account', function() {
 
         const instructionData = Buffer.concat([instructionDiscriminant, priceAccountIdBuffer, priceBuffer]);
 
-        const ix = new TransactionInstruction({
+        const mainIx = new TransactionInstruction({
             programId: program.programId,
             keys: [
                 { pubkey: provider.wallet.publicKey, isSigner: true, isWritable: true },
@@ -200,10 +216,20 @@ describe('Create Price Account', function() {
             data: instructionData,
         });
 
-        const tx = new Transaction().add(ix);
+        const tx = new Transaction()
+            .add(computeUnitLimitIx)
+            .add(mainIx);
 
         const sig = await provider.sendAndConfirm(tx, []);
         console.log("Transaction Signature:", sig);
+
+        const txDetails = await connection.getTransaction(sig, {
+            commitment: 'confirmed'
+        });
+        
+        if (txDetails?.meta) {
+            console.log("Compute Units Consumed:", txDetails.meta.computeUnitsConsumed);
+        }
 
         const accountInfo = await connection.getAccountInfo(priceAccountPda);
         if (!accountInfo) {
