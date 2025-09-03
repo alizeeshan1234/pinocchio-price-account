@@ -6,7 +6,6 @@ import { AnchorProvider, Program, Wallet } from '@coral-xyz/anchor';
 import fs from "fs";
 import BN from "bn.js";
 
-// Load the IDL from the file system
 const idl = JSON.parse(
   fs.readFileSync("./idl/pinocchio_price_account.json", "utf-8")
 );
@@ -26,7 +25,7 @@ describe('Create Price Account', function() {
     let program: Program;
     let provider: AnchorProvider;
     
-    const priceAccountId = new BN(929);
+    const priceAccountId = new BN(934);
     let priceAccountPda: PublicKey;
 
     before(async function () {
@@ -89,7 +88,6 @@ describe('Create Price Account', function() {
 
         console.log("Creating Price Account at PDA:", priceAccountPda.toString());
         
-        // Manual instruction data creation to match the program's raw instruction handler
         const instructionDiscriminant = Buffer.from([0]); // Per the IDL
         const priceAccountIdBuffer = priceAccountId.toArrayLike(Buffer, "le", 8);
         const instructionData = Buffer.concat([instructionDiscriminant, priceAccountIdBuffer]);
@@ -126,6 +124,103 @@ describe('Create Price Account', function() {
             lastUpdatedTimestamp: timestamp.toString(),
             priceAccountBump: bumpFromAccount,
         });
-
     });
+
+    it("Set Price", async () => {
+        const [priceAccountPda, bump] = PublicKey.findProgramAddressSync(
+            [Buffer.from("price_feed_account"), priceAccountId.toArrayLike(Buffer, "le", 8)],
+            program.programId
+        );
+
+        const instructionDiscriminant = Buffer.from([1]); // Per the IDL
+        const priceAccountIdBuffer = priceAccountId.toArrayLike(Buffer, "le", 8);
+        const priceToSet = 100;
+
+        const priceBuffer = Buffer.allocUnsafe(8);
+        priceBuffer.writeDoubleLE(priceToSet, 0);
+
+        const instructionData = Buffer.concat([instructionDiscriminant, priceAccountIdBuffer, priceBuffer]);
+
+        const ix = new TransactionInstruction({
+            programId: program.programId,
+            keys: [
+                { pubkey: provider.wallet.publicKey, isSigner: true, isWritable: true },
+                { pubkey: priceAccountPda, isSigner: false, isWritable: true },
+                { pubkey: SystemProgram.programId, isSigner: false, isWritable: false },
+            ],
+            data: instructionData,
+        });
+
+        const tx = new Transaction().add(ix);
+
+        const sig = await provider.sendAndConfirm(tx, []);
+        console.log("Transaction Signature:", sig);
+
+        const accountInfo = await connection.getAccountInfo(priceAccountPda);
+        if (!accountInfo) {
+            throw new Error("Account not found");
+        }
+        console.log(`Account Info: ${accountInfo}`)
+
+         const accountData = accountInfo.data;
+
+        const price = accountData.readDoubleLE(0); 
+        const timestamp = accountData.readBigInt64LE(8); 
+        const bumpFromAccount = accountData.readUInt8(16);
+
+        console.log("Account data:", {
+            price,
+            lastUpdatedTimestamp: timestamp.toString(),
+            priceAccountBump: bumpFromAccount,
+        });
+    });
+
+    it("Modify Price", async () => {
+        const [priceAccountPda, bump] = PublicKey.findProgramAddressSync(
+            [Buffer.from("price_feed_account"), priceAccountId.toArrayLike(Buffer, "le", 8)],
+            program.programId
+        );
+
+        const instructionDiscriminant = Buffer.from([2]);
+        const priceAccountIdBuffer = priceAccountId.toArrayLike(Buffer, "le", 8);
+        const modifiedPrice = 140;
+
+        const priceBuffer = Buffer.allocUnsafe(8);
+        priceBuffer.writeDoubleLE(modifiedPrice, 0);
+
+        const instructionData = Buffer.concat([instructionDiscriminant, priceAccountIdBuffer, priceBuffer]);
+
+        const ix = new TransactionInstruction({
+            programId: program.programId,
+            keys: [
+                { pubkey: provider.wallet.publicKey, isSigner: true, isWritable: true },
+                { pubkey: priceAccountPda, isSigner: false, isWritable: true },
+                { pubkey: SystemProgram.programId, isSigner: false, isWritable: false },
+            ],
+            data: instructionData,
+        });
+
+        const tx = new Transaction().add(ix);
+
+        const sig = await provider.sendAndConfirm(tx, []);
+        console.log("Transaction Signature:", sig);
+
+        const accountInfo = await connection.getAccountInfo(priceAccountPda);
+        if (!accountInfo) {
+            throw new Error("Account not found");
+        }
+        console.log(`Account Info: ${accountInfo}`)
+
+         const accountData = accountInfo.data;
+
+        const price = accountData.readDoubleLE(0); 
+        const timestamp = accountData.readBigInt64LE(8); 
+        const bumpFromAccount = accountData.readUInt8(16);
+
+        console.log("Account data:", {
+            price,
+            lastUpdatedTimestamp: timestamp.toString(),
+            priceAccountBump: bumpFromAccount,
+        });
+    })
 });
