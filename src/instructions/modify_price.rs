@@ -21,12 +21,7 @@ pub fn process_modify_price(accounts: &[AccountInfo], instruction_data: &[u8]) -
         instruction_data[8..16].try_into().map_err(|_| ProgramError::InvalidInstructionData)?
     );
 
-    let (price_account_pda, _bump) = pubkey::find_program_address(
-        &[b"price_feed_account", price_account_id.to_le_bytes().as_ref()],
-        &crate::ID
-    );
-
-    if !signer.is_signer() || price_account.data_len() == 0 || *price_account.key() != price_account_pda {
+    if !signer.is_signer() || price_account.data_len() == 0 {
         return Err(ProgramError::InvalidAccountData);
     };
 

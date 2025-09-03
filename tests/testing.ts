@@ -25,7 +25,7 @@ describe('Create Price Account', function() {
     let program: Program;
     let provider: AnchorProvider;
     
-    const priceAccountId = new BN(934);
+    const priceAccountId = new BN(834);
     let priceAccountPda: PublicKey;
 
     before(async function () {

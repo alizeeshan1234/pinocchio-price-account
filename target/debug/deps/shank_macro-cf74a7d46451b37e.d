@@ -1,9 +1,0 @@
-/Users/mohammedzeeshan/Desktop/pinocchio-price-account/target/debug/deps/libshank_macro-cf74a7d46451b37e.dylib: /Users/mohammedzeeshan/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/shank_macro-0.4.5/src/lib.rs /Users/mohammedzeeshan/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/shank_macro-0.4.5/src/account.rs /Users/mohammedzeeshan/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/shank_macro-0.4.5/src/builder.rs /Users/mohammedzeeshan/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/shank_macro-0.4.5/src/context.rs /Users/mohammedzeeshan/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/shank_macro-0.4.5/src/instruction.rs
-
-/Users/mohammedzeeshan/Desktop/pinocchio-price-account/target/debug/deps/shank_macro-cf74a7d46451b37e.d: /Users/mohammedzeeshan/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/shank_macro-0.4.5/src/lib.rs /Users/mohammedzeeshan/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/shank_macro-0.4.5/src/account.rs /Users/mohammedzeeshan/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/shank_macro-0.4.5/src/builder.rs /Users/mohammedzeeshan/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/shank_macro-0.4.5/src/context.rs /Users/mohammedzeeshan/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/shank_macro-0.4.5/src/instruction.rs
-
-/Users/mohammedzeeshan/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/shank_macro-0.4.5/src/lib.rs:
-/Users/mohammedzeeshan/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/shank_macro-0.4.5/src/account.rs:
-/Users/mohammedzeeshan/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/shank_macro-0.4.5/src/builder.rs:
-/Users/mohammedzeeshan/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/shank_macro-0.4.5/src/context.rs:
-/Users/mohammedzeeshan/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/shank_macro-0.4.5/src/instruction.rs:
